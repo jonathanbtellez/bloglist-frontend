@@ -94,7 +94,7 @@ const UserInfo = () => {
               <td className="table-body">{blog.title}</td>
               <td className="table-body">{blog.likes}</td>
               <td className="table-body">
-                <button onClick={() => setBlogToShow(blog)}>Ver info</button>
+                <button onClick={() => setBlogToShow(blog)} className="button-success">Ver info</button>
               </td>
             </tr>
           ))}
