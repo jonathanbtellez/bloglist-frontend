@@ -1,4 +1,4 @@
-import { Route, Routes, useParams } from "react-router-dom";
+import { Route, Routes } from "react-router-dom";
 
 import Login from "./components/Login";
 import Notification from "./components/Notification";
@@ -8,6 +8,7 @@ import { useUserValue } from "./context/UserContext";
 import BlogsView from "./views/BlogsView";
 import UsersView from "./views/UsersView,jsx";
 import UserInfo from "./components/UserInfo";
+import BlogView from "./views/BlogView";
 
 const App = () => {
   const user = useUserValue();
@@ -22,6 +23,7 @@ const App = () => {
           <Notification />
           <Routes>
             <Route path="/" element={<BlogsView />}></Route>
+            <Route path="/blogs/:id" element={<BlogView />}></Route>
             <Route path="/users" element={<UsersView />}>
               <Route path="/users/:id" element={<UserInfo />} />
             </Route>

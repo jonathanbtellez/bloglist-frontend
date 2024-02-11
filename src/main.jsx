@@ -6,6 +6,7 @@ import { NotificationContextProvider } from "./context/NotificationContext";
 import { UserContextProvider } from "./context/UserContext";
 import { UsersContextProvider } from "./context/UsersContext";
 import { BrowserRouter as Router } from "react-router-dom";
+import { BlogsContextProvider } from "./context/BlogContext";
 
 const queryClient = new QueryClient();
 
@@ -14,9 +15,11 @@ ReactDOM.createRoot(document.getElementById("root")).render(
     <QueryClientProvider client={queryClient}>
       <UserContextProvider>
         <UsersContextProvider>
-          <NotificationContextProvider>
-            <App />
-          </NotificationContextProvider>
+          <BlogsContextProvider>
+            <NotificationContextProvider>
+              <App />
+            </NotificationContextProvider>
+          </BlogsContextProvider>
         </UsersContextProvider>
       </UserContextProvider>
     </QueryClientProvider>

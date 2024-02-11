@@ -1,18 +1,19 @@
-import React from "react";
+import React, { useEffect } from "react";
 
 import { useUsersValue } from "../context/UsersContext";
-import { Link, useParams } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import { useBlogsDispatch } from "../context/BlogContext";
 
 const UserInfo = () => {
-  const user = useParams().id;
-  const usersValue = useUsersValue();
+  const navigate = useNavigate();
+  const userValue = useUsersValue();
+  const blogDispacth = useBlogsDispatch();
 
-  let userInfo = [];
-  if (!usersValue) {
-    return null
-  }
-  userInfo = usersValue.find((userDB) => userDB.id === user);
-  if (!userInfo) {
+  useEffect(() => {
+    if(!userValue){navigate('/users')}
+  },[]);
+
+  if (!userValue) {
     return (
       <div>
         <h2>User</h2>
@@ -22,13 +23,29 @@ const UserInfo = () => {
     );
   }
 
+  const setBlogToShow = (blog) => {
+    blogDispacth({
+      type: "SET",
+      payload: blog,
+    });
+  }
+
+  const goBack = () => {
+    navigate(-1);
+  };
+
   return (
     <div>
-      <h2>User</h2>
+      <div className="nav-container">
+        <h2>User</h2>
+        <button className="button-danger" onClick={goBack}>
+          Go back
+        </button>
+      </div>
       <hr />
       <p>
         <b>Name: </b>
-        {userInfo.name}
+        {userValue.name}
       </p>
       <h4>Added blogs: </h4>
       <table className="table-container">
@@ -36,18 +53,18 @@ const UserInfo = () => {
           <tr>
             <th className="table-head">Position</th>
             <th className="table-head">Name</th>
-            <th className="table-head">Blogs</th>
+            <th className="table-head">Likes</th>
             <th className="table-head">Actions</th>
           </tr>
         </thead>
         <tbody>
-          {userInfo.blogs.map((blog, index) => (
+          {userValue.blogs.map((blog, index) => (
             <tr key={index}>
               <td className="table-body">{index + 1}</td>
               <td className="table-body">{blog.title}</td>
               <td className="table-body">{blog.likes}</td>
               <td className="table-body">
-                <Link to={`/blogs/${blog.id}`}>Ver info</Link>
+                <Link to={`/blogs/${blog.id}`} onClick={()=> setBlogToShow(blog)}>Ver info</Link>
               </td>
             </tr>
           ))}

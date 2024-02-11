@@ -10,7 +10,6 @@ const BlogsView = () => {
   return (
     <>
       <Blogs />
-
       <Togglable buttonLabel="Create blog" ref={togglableBlogForm}>
         <BlogForm />
       </Togglable>

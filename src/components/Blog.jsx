@@ -43,6 +43,7 @@ const Blog = ({ blog, position }) => {
           type: "CLEAR",
         });
       }, 5000);
+      blog.likes++
     } catch (error) {
       notifyDispatch({
         type: "SET",
