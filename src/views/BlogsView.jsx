@@ -3,6 +3,7 @@ import React, { useRef } from "react";
 import Blogs from "../components/Blogs";
 import BlogForm from "../components/BlogForm";
 import Togglable from "../components/Togglable";
+
 const BlogsView = () => {
   const togglableBlogForm = useRef();
 
