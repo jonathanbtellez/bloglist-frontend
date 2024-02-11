@@ -1,17 +1,25 @@
 import React, { useEffect } from "react";
 
+import { useNavigate } from "react-router-dom";
+import { useMutation } from "react-query";
+
+import blogsService from "../services/blogs";
 import { useUsersValue } from "../context/UsersContext";
-import { Link, useNavigate } from "react-router-dom";
 import { useBlogsDispatch } from "../context/BlogContext";
+import { useNotifyDispatch } from "../context/NotificationContext";
 
 const UserInfo = () => {
   const navigate = useNavigate();
+
+  const notifyDispatch = useNotifyDispatch();
   const userValue = useUsersValue();
   const blogDispacth = useBlogsDispatch();
 
   useEffect(() => {
-    if(!userValue){navigate('/users')}
-  },[]);
+    if (!userValue) {
+      navigate("/users");
+    }
+  }, []);
 
   if (!userValue) {
     return (
@@ -23,12 +31,34 @@ const UserInfo = () => {
     );
   }
 
-  const setBlogToShow = (blog) => {
-    blogDispacth({
-      type: "SET",
-      payload: blog,
-    });
-  }
+  const getBlogMutation = useMutation(blogsService.getById, {
+    onSuccess: (blog) => {
+      blogDispacth({
+        type: "SET",
+        payload: blog,
+      });
+      navigate(`/blogs/${blog.id}`);
+    },
+  });
+
+  const setBlogToShow = async (blog) => {
+    try {
+      getBlogMutation.mutate({ id: blog.id });
+    } catch (error) {
+      notifyDispatch({
+        type: "SET",
+        payload: {
+          type: "error",
+          text: error.response,
+        },
+      });
+      setTimeout(() => {
+        notifyDispatch({
+          type: "CLEAR",
+        });
+      }, 5000);
+    }
+  };
 
   const goBack = () => {
     navigate(-1);
@@ -64,7 +94,7 @@ const UserInfo = () => {
               <td className="table-body">{blog.title}</td>
               <td className="table-body">{blog.likes}</td>
               <td className="table-body">
-                <Link to={`/blogs/${blog.id}`} onClick={()=> setBlogToShow(blog)}>Ver info</Link>
+                <button onClick={() => setBlogToShow(blog)}>Ver info</button>
               </td>
             </tr>
           ))}

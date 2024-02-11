@@ -9,14 +9,34 @@ const setToken = newToken => {
 }
 
 const getAll = async () => {
-  const {data} = await axios.get(baseUrl)
+  const { data } = await axios.get(baseUrl)
   console.log(data)
   return data
 }
 
+const getById = async ({ id }) => {
+  const { data } = await axios.get(`${baseUrl}/${id}`, {
+    headers: {
+      Authorization: token
+    }
+  })
+  console.log(data)
+  return data
+}
+
+const createComment = async ({ id, content }) => {
+  console.log({ id, content })
+  const response = await axios.post(`${baseUrl}/${id}/comment`, { content: content }, {
+    headers: {
+      Authorization: token
+    }
+  })
+  return response.data
+}
+
 const create = async (blog) => {
   const response = await axios.post(baseUrl, blog, {
-    headers:{
+    headers: {
       Authorization: token
     }
   })
@@ -25,7 +45,7 @@ const create = async (blog) => {
 
 const update = async (blog) => {
   const response = await axios.put(`${baseUrl}/${blog.id}`, blog, {
-    headers:{
+    headers: {
       Authorization: token
     }
   })
@@ -34,7 +54,7 @@ const update = async (blog) => {
 
 const destroy = async (blog) => {
   const response = await axios.delete(`${baseUrl}/${blog.id}`, {
-    headers:{
+    headers: {
       Authorization: token
     }
   })
@@ -43,4 +63,4 @@ const destroy = async (blog) => {
 
 
 
-export default { getAll, create, setToken, update, destroy }
+export default { getAll, create, setToken, update, destroy, createComment, getById }
